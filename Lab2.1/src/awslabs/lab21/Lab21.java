@@ -28,15 +28,15 @@ import com.amazonaws.services.s3.model.Bucket;
 
 public class Lab21 {
 
-    private static Region region = Region.getRegion(Regions.US_EAST_1);
+    private static Region region = Region.getRegion(Regions.AP_NORTHEAST_1);
 
-    // NON-STUDENT_CODEŠJn
+    // NON-STUDENT_CODEé–‹å§‹
     private static ILabCode labCode = new StudentCode();
     private static IOptionalLabCode optionalLabCode = new StudentCode();
     private static String labBucketPrefix = "awslab";
     
     /**
-     * ƒ‰ƒ{ƒR[ƒhÀs‚Ì—¬‚ê‚ğ§Œä
+     * ãƒ©ãƒœã‚³ãƒ¼ãƒ‰å®Ÿè¡Œã®æµã‚Œã‚’åˆ¶å¾¡
      */
     public static void main(String[] args) {
         try {
@@ -45,18 +45,18 @@ public class Lab21 {
             String publicTestImage = "public-test-image.png";
             String testImage2 = "test-image2.png";
 
-            //S3ƒNƒ‰ƒCƒAƒ“ƒg‚Ìì¬
+            //S3ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã®ä½œæˆ
             AmazonS3Client s3Client = new AmazonS3Client(new ClasspathPropertiesFileCredentialsProvider());
             s3Client.setRegion(region);
 
-            // ‚±‚Ìƒ‰ƒ{‚Ì‰ß‹ƒCƒ“ƒXƒ^ƒ“ƒX‚ÌcŠ[‚ğƒNƒŠ[ƒ“ƒAƒbƒv
+            // ã“ã®ãƒ©ãƒœã®éå»ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã®æ®‹éª¸ã‚’ã‚¯ãƒªãƒ¼ãƒ³ã‚¢ãƒƒãƒ—
             CleanupPreviousLabRuns(s3Client);
             
-            // ƒoƒPƒbƒg‚Ìì¬
+            // ãƒã‚±ãƒƒãƒˆã®ä½œæˆ
             System.out.println("Creating bucket " + bucketName);
             labCode.createBucket(s3Client, bucketName, region);
 
-            // ì¬‚µ‚½ƒoƒPƒbƒg‚ÉƒIƒuƒWƒFƒNƒg‚ğì¬
+            // ä½œæˆã—ãŸãƒã‚±ãƒƒãƒˆã«ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ä½œæˆ
             File sourceFile = new File(testImage);
             if (sourceFile.exists()) {
                 System.out.println("Uploading object: " + testImage);
@@ -79,18 +79,18 @@ public class Lab21 {
             	return;       	
             }
 
-            // ƒoƒPƒbƒg“à‚ÌƒIƒuƒWƒFƒNƒg‚ÌƒŠƒXƒg‚ğ“üè
+            // ãƒã‚±ãƒƒãƒˆå†…ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ãƒªã‚¹ãƒˆã‚’å…¥æ‰‹
             System.out.println("Listing items in bucket: " + bucketName);
             labCode.listObjects(s3Client, bucketName);
             System.out.println("Listing complete.");
 
-        	// 1‚Â‚ÌƒIƒuƒWƒFƒNƒg‚ÌACL‚Æ•ÏX‚µPublic‚É‚·‚é(make public)
+        	// 1ã¤ã®ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ACLã¨å¤‰æ›´ã—Publicã«ã™ã‚‹(make public)
             System.out.println("Changing the ACL to make an object public");
             labCode.makeObjectPublic(s3Client, bucketName, publicTestImage);
             System.out.println("Done the object should be publically available now. Test this URL to confirm:");
             System.out.println("  http://" + bucketName + ".s3.amazonaws.com/" + publicTestImage);
             
-            // ƒIƒuƒWƒFƒNƒg‚Ö‚Ì–‘O–¼•t‚«URL‚ğì¬‚µAƒtƒ@ƒCƒ‹‚Ö‚ÌˆêƒAƒNƒZƒX‚ğ•t—^
+            // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã¸ã®äº‹å‰ç½²åä»˜ãURLã‚’ä½œæˆã—ã€ãƒ•ã‚¡ã‚¤ãƒ«ã¸ã®ä¸€æ™‚ã‚¢ã‚¯ã‚»ã‚¹ã‚’ä»˜ä¸
             System.out.println("Generating presigned URL.");
             String presignedUrl = labCode.generatePreSignedUrl(s3Client, bucketName, testImage);
             System.out.println("Done. Test this URL to confirm:");
@@ -106,19 +106,19 @@ public class Lab21 {
     private static void CleanupPreviousLabRuns(AmazonS3 s3Client) {
 	Boolean isInformed = false;
 	
-	// ƒoƒPƒbƒg‚ÌƒŠƒXƒg‚ğ“üè 
+	// ãƒã‚±ãƒƒãƒˆã®ãƒªã‚¹ãƒˆã‚’å…¥æ‰‹ 
 	for (Bucket bucket : s3Client.listBuckets()) {
 	    if (bucket.getName().startsWith(labBucketPrefix)) {
 		if (!isInformed) {
 		    System.out.println("Cleaning up resources from previous lab run.");
 		    isInformed = true;
 		}
-		// ƒ}ƒbƒ`‚µ‚½ƒoƒPƒbƒg‚ğíœ 
+		// ãƒãƒƒãƒã—ãŸãƒã‚±ãƒƒãƒˆã‚’å‰Šé™¤ 
 		System.out.print("Deleting " + bucket.getName() + " bucket. ");
 		optionalLabCode.deleteBucket(s3Client, bucket.getName());
 		System.out.println("Done.");
 	    }
 	}
     }
-    // NON-STUDENT_CODEI—¹
+    // NON-STUDENT_CODEçµ‚äº†
 }
